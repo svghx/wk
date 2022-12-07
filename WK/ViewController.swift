@@ -36,7 +36,7 @@ class ViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(webView)
         webView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
-        webView.height(550)
+        webView.height(100)
         
         let label = UILabel()
         label.numberOfLines = 0
