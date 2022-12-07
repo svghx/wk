@@ -36,7 +36,16 @@ class ViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(webView)
         webView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
-        webView.height(100)
+        webView.height(550)
+        
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.text = "This label should position itself just below the loaded post"
+        label.backgroundColor = .red
+        view.addSubview(label)
+        label.horizontalToSuperview(insets: .horizontal(10))
+        label.topToBottom(of: webView, offset: 10)
         
         let instaString = """
         <iframe class="instagram-embed" src="https://instagram.com/p/BlNaCrZnkFu/embed/captioned" width='100%' height='100%' frameborder="0"></iframe>
