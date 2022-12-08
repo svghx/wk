@@ -12,6 +12,10 @@ import TinyConstraints
 class ViewController: UIViewController {
     let headerHTML = "<header><meta name='viewport' content= 'width=device width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>"
     
+    
+    var scrollView: UIScrollView = UIScrollView()
+    var contentView:UIView = UIView()
+    
     lazy var webView: WKWebView = {
         let configuration = WKWebViewConfiguration()
         let source: String = "var meta = document.createElement('meta');" +
@@ -27,26 +31,53 @@ class ViewController: UIViewController {
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = self
         webView.contentMode = .scaleToFill
+        webView.scrollView.isScrollEnabled = false
         return webView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        view.backgroundColor = .white
-        view.addSubview(webView)
-        webView.edgesToSuperview(excluding: .bottom, usingSafeArea: true)
+        view.addSubview(scrollView)
+        scrollView.centerXToSuperview()
+        scrollView.width(to: view)
+        scrollView.topToSuperview(usingSafeArea: true)
+        scrollView.bottomToSuperview()
+        
+        scrollView.addSubview(contentView)
+        contentView.centerXToSuperview()
+        contentView.width(to: scrollView)
+        contentView.topToSuperview()
+        contentView.bottomToSuperview()
+        
+        contentView.width(to: view, .none, multiplier: 1, offset: 0, relation: .equal, priority: .defaultHigh, isActive: true)
+        contentView.height(to: view, .none, multiplier: 1, offset: 0, relation: .equal, priority: .defaultLow, isActive: true)
+
+        
+        let labelOne = UILabel()
+        labelOne.numberOfLines = 0
+        labelOne.font = .systemFont(ofSize: 19, weight: .medium)
+        labelOne.textColor = .systemGray
+        labelOne.text = "Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus."
+        
+        let labelTwo = UILabel()
+        labelTwo.numberOfLines = 0
+        labelTwo.font = .systemFont(ofSize: 19, weight: .medium)
+        labelTwo.textColor = .systemGray
+        labelTwo.text = "Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risusMorbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus"
+        
+        let stackView = UIStackView(arrangedSubviews: [labelOne, webView, labelTwo])
+        stackView.axis = .vertical
+        stackView.spacing = 15
+        contentView.addSubview(stackView)
+        stackView.edgesToSuperview()
+        
+        //initial height would be smaller like in this case
+        //what's needed is that after the post is loaded the height should adjust accordingly
         webView.height(100)
         
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.text = "This label should position itself just below the loaded post"
-        label.backgroundColor = .red
-        view.addSubview(label)
-        label.horizontalToSuperview(insets: .horizontal(10))
-        label.topToBottom(of: webView, offset: 10)
-        
+
+        //feel free to try below sources
         let instaString = """
         <iframe class="instagram-embed" src="https://instagram.com/p/BlNaCrZnkFu/embed/captioned" width='100%' height='100%' frameborder="0"></iframe>
         """
