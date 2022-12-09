@@ -101,7 +101,7 @@ class ViewController: UIViewController {
 extension ViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if webView.isLoading == false {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 webView.evaluateJavaScript("document.readyState", completionHandler: { (complete, error) in
                     if complete != nil {
                         webView.evaluateJavaScript("document.body.scrollHeight", completionHandler: { (height, error) in
